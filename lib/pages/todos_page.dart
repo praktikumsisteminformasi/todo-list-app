@@ -21,6 +21,12 @@ class _TodosPageState extends State<TodosPage> {
     });
   }
 
+  void toggleTodoStatus(int index, bool? isComplete) {
+    setState(() {
+      todos[index]['completed'] = isComplete;
+    });
+  }
+
   @override
   void initState() {
     fetchTodos();
@@ -44,23 +50,36 @@ class _TodosPageState extends State<TodosPage> {
         separatorBuilder: (context, index) => const SizedBox(height: 20),
         itemBuilder: (context, index) {
           return TodoItem(
+            index: index,
             title: todos[index]['title'],
             completed: todos[index]['completed'],
+            toggleTodoStatus: toggleTodoStatus,
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/add-todo');
+        },
+        backgroundColor: Colors.brown,
+        child: const Icon(Icons.add, color: Colors.white,),
       ),
     );
   }
 }
 
 class TodoItem extends StatelessWidget {
+  final int index;
   final String title;
   final bool completed;
+  final void Function(int index, bool? isComplete) toggleTodoStatus;
 
   const TodoItem({
     super.key,
+    required this.index,
     required this.title,
-    required this.completed
+    required this.completed,
+    required this.toggleTodoStatus,
   });
 
   @override
@@ -73,7 +92,9 @@ class TodoItem extends StatelessWidget {
         trailing: Checkbox(
           checkColor: Colors.white,
           value: completed,
-          onChanged: (bool? isChecked) {},
+          onChanged: (bool? isChecked) {
+            toggleTodoStatus(index, isChecked);
+          },
         ),
       ),
     );
