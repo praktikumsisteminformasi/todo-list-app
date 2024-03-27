@@ -18,12 +18,15 @@ class _AddTodoPageState extends State<AddTodoPage> {
   bool isLoading = false;
 
   void addTodo() async {
+    // Kode "formKey.currentState!.validate()" dipakai untuk memvalidasi Widget TextFormField yang ada di widget Form
     if (formKey.currentState!.validate()) {
+      // Loading kan tombol-nya
       setState(() {
         isLoading = true;
       });
 
       // Tembak API untuk menambah todo
+      // Kita pakai HTTP Method POST karena mau nambah data todos yang ada di server
       Response response = await dio.post(
         'https://jsonplaceholder.typicode.com/todos',
         data: { 'title': titleController.text }
@@ -38,6 +41,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
         Navigator.pop(context);
       }
 
+      // Setop loading tombolnya
       setState(() {
         isLoading = false;
       });

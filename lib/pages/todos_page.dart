@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
+// Kita pakai kelas objek dari kelas Dio yang disimpan ke variabel dio
+// Nantinya variabel dio ini bakal kita pakai setiap mau nembak API
 final dio = Dio();
 
 class TodosPage extends StatefulWidget {
@@ -14,13 +16,18 @@ class _TodosPageState extends State<TodosPage> {
   List<Map> todos = [];
 
   void fetchTodos() async {
+    // Tembak API ke URL jsonplaceholder.typicode.com dengan endpoint /todos
+    // Kita pakai HTTP method GET karena cuma mau ngambil data todos aja
+    // Hasil respon dari server jsonplaceholder.typicode.com kita simpan ke variabel response
     Response response = await dio.get('https://jsonplaceholder.typicode.com/todos');
     
+    // Kita simpan responnya ke variabel todos
     setState(() {
       todos = List<Map>.from(response.data);
     });
   }
 
+  // Ini fungsi untuk nge-ceklis status sebuah todo
   void toggleTodoStatus(int index, bool? isComplete) {
     setState(() {
       todos[index]['completed'] = isComplete;
@@ -29,7 +36,9 @@ class _TodosPageState extends State<TodosPage> {
 
   @override
   void initState() {
+    // Ambil data todos saat halamannya kebuka
     fetchTodos();
+
     super.initState();
   }
 
@@ -68,6 +77,7 @@ class _TodosPageState extends State<TodosPage> {
   }
 }
 
+// Widget TodoItem ini widget buatan kita sendiri
 class TodoItem extends StatelessWidget {
   final int index;
   final String title;
